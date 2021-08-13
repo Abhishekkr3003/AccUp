@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "106607370035",
+    "project_id": "accup-b4eb6",
+    "storage_bucket": "accup-b4eb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106607370035:android:edd9f433ce57d5db04a846",
+        "android_client_info": {
+          "package_name": "com.example.accup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106607370035-0srotnlnlnnr9l16jevtlno30393b3k4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.accup",
+            "certificate_hash": "5ce8f827de599ced7363bd06246bafa66769af01"
+          }
+        },
+        {
+          "client_id": "106607370035-rk0oodtgi9mvv7t3da2va3637al1ka4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiRkOtt9z1CNDsFIYoXMhAvFCKBz1dJI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106607370035-rk0oodtgi9mvv7t3da2va3637al1ka4t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
