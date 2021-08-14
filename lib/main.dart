@@ -1,3 +1,4 @@
+import 'package:accup/Pages/loginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'Pages/SplashScreen.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -20,22 +21,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // final Future<FirebaseApp> _initFirebaseSdk = Firebase.initializeApp();
+  final Future<FirebaseApp> _initFirebaseSdk = Firebase.initializeApp();
   final _navigatorKey = new GlobalKey<NavigatorState>();
 
-  // Future<void> waitAndNavigate(User? user) async {
-  //   await Future.delayed(Duration(seconds: 1), () {
-  //     if (user == null) {
-  //       print('User is currently signed out!');
-  //       _navigatorKey.currentState!.pushReplacementNamed(MyRoutes.loginPage);
-  //     } else {
-  //       // Future.delayed(Duration(seconds: 5), () {});
-  //       print('User is signed in!');
-  //       _navigatorKey.currentState!
-  //           .pushReplacementNamed(MyRoutes.homeScreenShower);
-  //     }
-  //   });
-  // }
+  Future<void> waitAndNavigate(User? user) async {
+    await Future.delayed(Duration(seconds: 1), () {
+      if (user == null) {
+        print('User is currently signed out!');
+        _navigatorKey.currentState!.pushReplacementNamed(MyRoutes.loginPage);
+      } else {
+        // Future.delayed(Duration(seconds: 5), () {});
+        print('User is signed in!');
+        _navigatorKey.currentState!
+            .pushReplacementNamed(MyRoutes.homeScreenShower);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,23 +46,23 @@ class _MyAppState extends State<MyApp> {
       theme: MyThemes.lightTheme(context),
       navigatorKey: _navigatorKey,
       darkTheme: MyThemes.darkTheme(context),
-      home: HomeScreenViewer(),
-      // home: FutureBuilder(
-      //     future: _initFirebaseSdk,
-      //     builder: (_, snapshot) {
-      //       // if (snapshot.hasError) return ErrorScreen();
+      // home: HomeScreenViewer(),
+      home: FutureBuilder(
+          future: _initFirebaseSdk,
+          builder: (_, snapshot) {
+            // if (snapshot.hasError) return ErrorScreen();
 
-      //       if (snapshot.connectionState == ConnectionState.done) {
-      //         // Assign listener after the SDK is initialized successfully
-      //         FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      //           waitAndNavigate(user);
-      //         });
-      //       }
-      //       return SplashScreen();
-      //     }),
+            if (snapshot.connectionState == ConnectionState.done) {
+              // Assign listener after the SDK is initialized successfully
+              FirebaseAuth.instance.authStateChanges().listen((User? user) {
+                waitAndNavigate(user);
+              });
+            }
+            return SplashScreen();
+          }),
       //initialRoute: MyRoutes.splashSceen, // By default ye hi hota hai
       routes: {
-        //MyRoutes.loginPage: (context) => LoginPage(),
+        MyRoutes.loginPage: (context) => LoginPage(),
         MyRoutes.homePage: (context) => HomePage(),
         MyRoutes.splashSceen: (context) => SplashScreen(),
         MyRoutes.homeScreenShower: (context) => HomeScreenViewer(),
