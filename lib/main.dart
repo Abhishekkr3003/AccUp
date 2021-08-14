@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
       theme: MyThemes.lightTheme(context),
       navigatorKey: _navigatorKey,
       darkTheme: MyThemes.darkTheme(context),
-      // home: LoginPage(),
+      // home: HomeScreenViewer(),
       home: FutureBuilder(
           future: _initFirebaseSdk,
           builder: (_, snapshot) {

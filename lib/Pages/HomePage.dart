@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogHeader.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogShower.dart';
+import 'package:accup/widgets/reusable_card.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -77,40 +78,42 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CatalogHeader().pOnly(left: 20, top: 12, right: 20),
-                  isDrawerOpen
-                      ? IconButton(
-                          icon: Icon(FontAwesomeIcons.chevronCircleRight),
-                          onPressed: () {
-                            setState(() {
-                              xOffset = 0;
-                              yOffset = 0;
-                              scaleFactor = 1;
-                              isDrawerOpen = false;
-                            });
-                          },
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            FontAwesomeIcons.ioxhost,
-                            size: 30,
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CatalogHeader().pOnly(left: 20, top: 12, right: 20),
+                    isDrawerOpen
+                        ? IconButton(
+                            icon: Icon(FontAwesomeIcons.chevronCircleRight),
+                            onPressed: () {
+                              setState(() {
+                                xOffset = 0;
+                                yOffset = 0;
+                                scaleFactor = 1;
+                                isDrawerOpen = false;
+                              });
+                            },
+                          )
+                        : IconButton(
+                            icon: Icon(
+                              FontAwesomeIcons.ioxhost,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  xOffset = -100;
+                                  yOffset = 150;
+                                  scaleFactor = 0.7;
+                                  isDrawerOpen = true;
+                                },
+                              );
+                            },
                           ),
-                          onPressed: () {
-                            setState(
-                              () {
-                                xOffset = -100;
-                                yOffset = 150;
-                                scaleFactor = 0.7;
-                                isDrawerOpen = true;
-                              },
-                            );
-                          },
-                        ),
-                ],
-              ).pOnly(left: 20, right: 16),
+                  ],
+                ).pOnly(left: 20, right: 16),
+              ),
               CupertinoSearchTextField(
                 style: TextStyle(
                   color: context.primaryColor,
@@ -120,6 +123,85 @@ class _HomePageState extends State<HomePage> {
                 },
               ).pOnly(top: 12, left: 20, right: 20),
               20.heightBox,
+              Container(
+                color: Color(0xFFE9C241),
+                height: 60.0,
+                child: Row(
+                  children: [
+                    "Categories"
+                        .text
+                        .xl4
+                        .color(context.accentColor)
+                        .bold
+                        .make(),
+                    SizedBox(
+                      height: 35,
+                      width: 75,
+                    ),
+                    //"Show All".text.xl3.color(context.accentColor).bold.make(),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     print('object');
+                    //     setState(() {});
+                    //   },
+                    //   child: Icon(
+                    //     Icons.article_outlined,
+                    //     size: 40.0,
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: Image.asset('assets/images/games.png'),
+                    ),
+                  ),
+                  Expanded(
+                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: Image.asset('assets/images/OTT.png'),
+                    ),
+                  ),
+                  Expanded(
+                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: Image.asset(
+                        'assets/images/SocialMedia.png',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: Image.asset(
+                        'assets/images/others.png',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              //  Container(
+              //    child: GridView(
+              //    ),),
+              // )
               // (CatalogModel.items != null && CatalogModel.items!.length > 0)
               //     ? CatalogShower().pOnly(left: 20, right: 20).expand()
               //     : Center(
