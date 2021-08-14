@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              "Cataloap".text.bold.color(context.theme.buttonColor).xl6.make(),
+              "AccUP".text.bold.color(context.theme.buttonColor).xl6.make(),
               Icon(CupertinoIcons.cart)
             ],
           ),
