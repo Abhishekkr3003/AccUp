@@ -7,6 +7,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogHeader.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogShower.dart';
 import 'package:accup/widgets/reusable_card.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +22,14 @@ class _HomePageState extends State<HomePage> {
   bool isDrawerOpen = false;
 
   var toBePrinted = "Android App!";
+
+  final List<String> _listItem = [
+    'assets/images/games.png',
+    'assets/images/OTT.png',
+    'assets/images/SocialMedia.png',
+    'assets/images/others.png',
+  ];
+
   // String cloudIp = "api-cataloap.herokuapp.com";
 
   @override
@@ -152,51 +161,37 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: Image.asset('assets/images/games.png'),
-                    ),
-                  ),
-                  Expanded(
-                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: Image.asset('assets/images/OTT.png'),
-                    ),
-                  ),
-                  Expanded(
-                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: Image.asset(
-                        'assets/images/SocialMedia.png',
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: _listItem.map((item) => Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage(item),
+                          fit: BoxFit.cover
+                        )
+                      ),
+                      child: Transform.translate(
+                        offset: Offset(50, -50),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 65, vertical: 63),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white
+                          ),
+                          child: Icon(Icons.bookmark_border, size: 15,),
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    //flex: 2, if we want to change the size of the expanded widget to a different ratio.
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: Image.asset(
-                        'assets/images/others.png',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                  )).toList(),
+                )
+              )
 
               //  Container(
               //    child: GridView(
