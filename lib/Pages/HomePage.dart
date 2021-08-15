@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogHeader.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogShower.dart';
 import 'package:accup/widgets/reusable_card.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,10 +30,24 @@ class _HomePageState extends State<HomePage> {
     'assets/images/others.png',
   ];
 
-  // String cloudIp = "api-cataloap.herokuapp.com";
+  final List<String> _listName = ['Games', 'OTT', 'Social Media', 'Others'];
+  List<Map> communityData = [];
+  getCommunities() async {
+    await FirebaseFirestore.instance
+        .collection("community")
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
+              print(doc['name']);
+              communityData.add(doc.data());
+            }));
+    setState(() {});
+  }
+
+  int index = 0;
 
   @override
   void initState() {
+    getCommunities();
     super.initState();
   }
 
@@ -82,7 +96,10 @@ class _HomePageState extends State<HomePage> {
         child: GestureDetector(
           onPanDown: (value) async {
             print("hi");
-            //await loadData();
+            setState(() async {
+              communityData = [];
+              await getCommunities();
+            });
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CatalogHeader().pOnly(left: 20, top: 12, right: 20),
+                    CatalogHeader().pOnly(top: 12, right: 20),
                     isDrawerOpen
                         ? IconButton(
                             icon: Icon(FontAwesomeIcons.chevronCircleRight),
@@ -133,65 +150,77 @@ class _HomePageState extends State<HomePage> {
               ).pOnly(top: 12, left: 20, right: 20),
               20.heightBox,
               Container(
+                width: MediaQuery.of(context).size.width,
                 color: Color(0xFFE9C241),
-                height: 60.0,
-                child: Row(
-                  children: [
-                    "Categories"
-                        .text
-                        .xl4
-                        .color(context.accentColor)
-                        .bold
-                        .make(),
-                    SizedBox(
-                      height: 35,
-                      width: 75,
-                    ),
-                    //"Show All".text.xl3.color(context.accentColor).bold.make(),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     print('object');
-                    //     setState(() {});
-                    //   },
-                    //   child: Icon(
-                    //     Icons.article_outlined,
-                    //     size: 40.0,
-                    //   ),
-                    // ),
-                  ],
-                ),
+                height: 40.0,
+                child: "Categories"
+                    .text
+                    .xl3
+                    .color(context.accentColor)
+                    .bold
+                    .make()
+                    .pOnly(left: 10),
+
+                //"Show All".text.xl3.color(context.accentColor).bold.make(),
+                // GestureDetector(
+                //   onTap: () {
+                //     print('object');
+                //     setState(() {});
+                //   },
+                //   child: Icon(
+                //     Icons.article_outlined,
+                //     size: 40.0,
+                //   ),
+                // ),
               ),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  children: _listItem.map((item) => Card(
-                    color: Colors.transparent,
-                    elevation: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: AssetImage(item),
-                          fit: BoxFit.cover
-                        )
-                      ),
-                      child: Transform.translate(
-                        offset: Offset(50, -50),
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 65, vertical: 63),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white
-                          ),
-                          child: Icon(Icons.bookmark_border, size: 15,),
-                        ),
-                      ),
+              10.heightBox,
+
+              Row(
+                children: [
+                  GestureDetector(
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 70,
+                            child: Image.asset('assets/images/games.png')),
+                        Text('Games')
+                      ],
                     ),
-                  )).toList(),
-                )
-              )
+                  ),
+                  GestureDetector(
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 70.0,
+                            child: Image.asset('assets/images/OTT.png')),
+                        Text('OTT')
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 70.0,
+                            child:
+                                Image.asset('assets/images/SocialMedia.png')),
+                        Text('Social Media')
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 70.0,
+                            child: Image.asset('assets/images/others.png')),
+                        Text('Others')
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              10.heightBox,
 
               //  Container(
               //    child: GridView(
@@ -205,6 +234,49 @@ class _HomePageState extends State<HomePage> {
               //         ),
               //       ).expand(),
               // Text('hi'),
+
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Color(0xFFE9C241),
+                height: 40.0,
+                child: "Communities"
+                    .text
+                    .xl3
+                    .color(context.accentColor)
+                    .bold
+                    .make()
+                    .pOnly(left: 10),
+              ),
+              10.heightBox,
+              communityData.isNotEmpty
+                  ? GridView.builder(
+                      padding: EdgeInsets.all(5),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 150,
+                          childAspectRatio: 1.25,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10),
+                      itemCount: communityData.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext ctx, index) {
+                        return Container(
+                          alignment: Alignment.center,
+                          // child: Text(communityData[index]["name"],
+                          //     style: TextStyle(
+                          //         color: Colors.white,
+                          //         fontWeight: FontWeight.bold,
+                          //         fontSize: 10)),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    communityData[index]["imageURL"],
+                                  )),
+                              color: Colors.amber,
+                              borderRadius: BorderRadius.circular(15)),
+                        );
+                      }).expand()
+                  : CircularProgressIndicator().centered().expand(),
             ],
           ),
         ),

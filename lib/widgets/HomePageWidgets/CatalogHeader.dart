@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class CatalogHeader extends StatelessWidget {
@@ -11,7 +12,17 @@ class CatalogHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            "AccUP".text.xl4.color(context.accentColor).bold.make(),
+            // CircleAvatar(
+            //   radius: 30,
+            //   backgroundImage: AssetImage("assets/images/Icon.jpeg"),
+            // ).pOnly(right: 10),
+            Text(
+              "AccUP",
+              style: GoogleFonts.pacifico(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ],
