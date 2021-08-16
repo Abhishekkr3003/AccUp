@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:accup/Pages/categoriesPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -178,6 +179,13 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoriesPage(page: "games")));
+                    },
                     child: Column(
                       children: [
                         Container(
@@ -188,6 +196,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoriesPage(page: "ott")));
+                    },
                     child: Column(
                       children: [
                         Container(
@@ -198,6 +213,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoriesPage(page: "Social media")));
+                    },
                     child: Column(
                       children: [
                         Container(
@@ -209,6 +231,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoriesPage(page: "others")));
+                    },
                     child: Column(
                       children: [
                         Container(
