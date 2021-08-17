@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogHeader.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogShower.dart';
@@ -33,9 +35,12 @@ class _HomePageState extends State<HomePage> {
 
   final List<String> _listName = ['Games', 'OTT', 'Social Media', 'Others'];
   List<Map> communityData = [];
-  getCommunities() async {
+  Future<void> getCommunities() async {
+    communityData = [];
     await FirebaseFirestore.instance
-        .collection("community")
+        .collection("category")
+        .doc("games")
+        .collection("communities")
         .get()
         .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
               print(doc['name']);
@@ -89,19 +94,18 @@ class _HomePageState extends State<HomePage> {
           ..rotateY(isDrawerOpen ? -0.5 : 0),
         duration: Duration(milliseconds: 150),
         decoration: BoxDecoration(
-            color: context.canvasColor,
+            color: Colors.amber.shade50,
             borderRadius: BorderRadius.circular(isDrawerOpen ? 60 : 0.0)),
 
         //padding: EdgeInsets.only(left: 16, top: 16, right: 16),
         //color: Colors.white,
         child: GestureDetector(
-          onPanDown: (value) async {
-            print("hi");
-            setState(() async {
-              communityData = [];
-              await getCommunities();
-            });
-          },
+          // onPanDown: (value) async {
+          //   print("hi");
+          //   communityData = [];
+          //   await getCommunities();
+          //   setState(() {});
+          // },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -218,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  CategoriesPage(page: "Social media")));
+                                  CategoriesPage(page: "socialMedia")));
                     },
                     child: Column(
                       children: [
@@ -235,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
+                              builder: (co_handleRefreshntext) =>
                                   CategoriesPage(page: "others")));
                     },
                     child: Column(
@@ -276,35 +280,60 @@ class _HomePageState extends State<HomePage> {
                     .make()
                     .pOnly(left: 10),
               ),
-              10.heightBox,
+              // 10.heightBox,
               communityData.isNotEmpty
-                  ? GridView.builder(
-                      padding: EdgeInsets.all(5),
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 150,
-                          childAspectRatio: 1.25,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10),
-                      itemCount: communityData.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext ctx, index) {
-                        return Container(
-                          alignment: Alignment.center,
-                          // child: Text(communityData[index]["name"],
-                          //     style: TextStyle(
-                          //         color: Colors.white,
-                          //         fontWeight: FontWeight.bold,
-                          //         fontSize: 10)),
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(
-                                    communityData[index]["imageURL"],
-                                  )),
-                              color: Colors.amber,
-                              borderRadius: BorderRadius.circular(15)),
-                        );
-                      }).expand()
+                  ? LiquidPullToRefresh(
+                      // borderWidth: 0.5,
+                      color: Color(0xFFE9C241),
+                      showChildOpacityTransition: false,
+                      animSpeedFactor: 10.0,
+                      springAnimationDurationInMilliseconds: 500,
+
+                      // key: _refreshIndicatorKey,	// key if you want to add
+                      onRefresh: getCommunities, // refresh callback
+                      child: GridView.builder(
+                          padding: EdgeInsets.all(8),
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 150,
+                                  childAspectRatio: 1.25,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10),
+                          itemCount: communityData.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                // TODO
+                                Fluttertoast.showToast(
+                                    msg: communityData[index]["name"]);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                // child: Text(communityData[index]["name"],
+                                //     style: TextStyle(
+                                //         color: Colors.white,
+                                //         fontWeight: FontWeight.bold,
+                                //         fontSize: 10)),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 10.0,
+                                      ),
+                                    ],
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        communityData[index]["imageURL"],
+                                      ),
+                                    ),
+                                    color: Colors.yellow.shade50,
+                                    borderRadius: BorderRadius.circular(15)),
+                              ),
+                            );
+                          }),
+                    ).expand()
                   : CircularProgressIndicator().centered().expand(),
             ],
           ),

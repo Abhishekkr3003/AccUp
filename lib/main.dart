@@ -48,20 +48,20 @@ class _MyAppState extends State<MyApp> {
       theme: MyThemes.lightTheme(context),
       navigatorKey: _navigatorKey,
       darkTheme: MyThemes.darkTheme(context),
-      home: HomeScreenViewer(),
-      // home: FutureBuilder(
-      //     future: _initFirebaseSdk,
-      //     builder: (_, snapshot) {
-      //       // if (snapshot.hasError) return ErrorScreen();
+      // home: HomeScreenViewer(),
+      home: FutureBuilder(
+          future: _initFirebaseSdk,
+          builder: (_, snapshot) {
+            // if (snapshot.hasError) return ErrorScreen();
 
-      //       if (snapshot.connectionState == ConnectionState.done) {
-      //         // Assign listener after the SDK is initialized successfully
-      //         FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      //           waitAndNavigate(user);
-      //         });
-      //       }
-      //       return SplashScreen();
-      //     }),
+            if (snapshot.connectionState == ConnectionState.done) {
+              // Assign listener after the SDK is initialized successfully
+              FirebaseAuth.instance.authStateChanges().listen((User? user) {
+                waitAndNavigate(user);
+              });
+            }
+            return SplashScreen();
+          }),
       routes: {
         MyRoutes.loginPage: (context) => LoginPage(),
         MyRoutes.homePage: (context) => HomePage(),
