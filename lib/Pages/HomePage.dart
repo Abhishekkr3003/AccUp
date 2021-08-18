@@ -302,27 +302,28 @@ class _HomePageState extends State<HomePage> {
               child: new ListView.builder(
                 itemCount: communityData.length,
                 itemBuilder: (context, index) {
-                  return new Container(
-                    margin: EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 5.0),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.grey,
-                        //     blurRadius: 10.0,
-                        //   ),
-                        // ],
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            communityData[index]["imageURL"],
+                  return new Card(
+                    child: new Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 5.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 10.0,
+                            ),
+                          ],
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                              communityData[index]["imageURL"],
+                            ),
                           ),
-                        ),
-                        color: Colors.yellow.shade50,
-                        borderRadius: BorderRadius.circular(15)),
-                    width: 80.0,
-                    // child: new Text('Hello'),
-                    alignment: Alignment.center,
+                          color: Colors.yellow.shade50,
+                          borderRadius: BorderRadius.circular(15)),
+                      width: 80.0,
+                      // child: new Text('Hello'),
+                      alignment: Alignment.center,
+                    ),
                   );
                 },
                 scrollDirection: Axis.horizontal,
@@ -330,19 +331,19 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              color: Color(0xFFE9C241),
-              height: 40.0,
+              // color: Color(0xFFE9C241),
+              // height: 40.0,
               child: "Others"
                   .text
-                  .xl3
+                  .xl5
                   .color(context.accentColor)
                   .bold
                   .make()
                   .pOnly(left: 10),
             ),
-            10.heightBox,
+            // 10.heightBox,
             Container(
-              height: 100.0,
+              height: 150.0,
               child: new ListView.builder(
                 itemCount: communityData.length,
                 itemBuilder: (context, index) {
@@ -364,7 +365,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         color: Colors.yellow.shade50,
                         borderRadius: BorderRadius.circular(15)),
-                    width: 80.0,
+                    width: 150.0,
                     // child: new Text('Hello'),
                     alignment: Alignment.center,
                   );
