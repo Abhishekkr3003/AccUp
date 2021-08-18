@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:accup/widgets/HomePageWidgets/CatalogHeader.dart';
@@ -24,19 +25,12 @@ class _HomePageState extends State<HomePage> {
 
   bool isDrawerOpen = false;
 
-  var toBePrinted = "Android App!";
-
-  final List<String> _listItem = [
-    'assets/images/games.png',
-    'assets/images/OTT.png',
-    'assets/images/SocialMedia.png',
-    'assets/images/others.png',
-  ];
-
-  final List<String> _listName = ['Games', 'OTT', 'Social Media', 'Others'];
-  List<Map> communityData = [];
+  List<Map> gamesList = [];
+  List<Map> ottList = [];
+  List<Map> socialList = [];
+  List<Map> othersList = [];
   Future<void> getCommunities() async {
-    communityData = [];
+    gamesList = [];
     await FirebaseFirestore.instance
         .collection("category")
         .doc("games")
@@ -44,7 +38,37 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
               print(doc['name']);
-              communityData.add(doc.data());
+              gamesList.add(doc.data());
+            }));
+    ottList = [];
+    await FirebaseFirestore.instance
+        .collection("category")
+        .doc("ott")
+        .collection("communities")
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
+              print(doc['name']);
+              ottList.add(doc.data());
+            }));
+    socialList = [];
+    await FirebaseFirestore.instance
+        .collection("category")
+        .doc("socialMedia")
+        .collection("communities")
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
+              print(doc['name']);
+              socialList.add(doc.data());
+            }));
+    othersList = [];
+    await FirebaseFirestore.instance
+        .collection("category")
+        .doc("others")
+        .collection("communities")
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
+              print(doc['name']);
+              othersList.add(doc.data());
             }));
     setState(() {});
   }
@@ -99,281 +123,290 @@ class _HomePageState extends State<HomePage> {
 
         //padding: EdgeInsets.only(left: 16, top: 16, right: 16),
         //color: Colors.white,
-        child: ListView(
-          children: [
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CatalogHeader().pOnly(top: 12, right: 20),
-                  isDrawerOpen
-                      ? IconButton(
-                          icon: Icon(FontAwesomeIcons.chevronCircleRight),
-                          onPressed: () {
-                            setState(() {
-                              xOffset = 0;
-                              yOffset = 0;
-                              scaleFactor = 1;
-                              isDrawerOpen = false;
-                            });
-                          },
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            FontAwesomeIcons.ioxhost,
-                            size: 30,
+        child: LiquidPullToRefresh(
+          showChildOpacityTransition: false,
+          onRefresh: getCommunities,
+          child: ListView(
+            children: [
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CatalogHeader().pOnly(top: 12, right: 20),
+                    isDrawerOpen
+                        ? IconButton(
+                            icon: Icon(FontAwesomeIcons.chevronCircleRight),
+                            onPressed: () {
+                              setState(() {
+                                xOffset = 0;
+                                yOffset = 0;
+                                scaleFactor = 1;
+                                isDrawerOpen = false;
+                              });
+                            },
+                          )
+                        : IconButton(
+                            icon: Icon(
+                              FontAwesomeIcons.ioxhost,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  xOffset = -100;
+                                  yOffset = 150;
+                                  scaleFactor = 0.7;
+                                  isDrawerOpen = true;
+                                },
+                              );
+                            },
                           ),
-                          onPressed: () {
-                            setState(
-                              () {
-                                xOffset = -100;
-                                yOffset = 150;
-                                scaleFactor = 0.7;
-                                isDrawerOpen = true;
-                              },
-                            );
-                          },
-                        ),
-                ],
-              ).pOnly(left: 20, right: 16),
-            ),
-            CupertinoSearchTextField(
-              style: TextStyle(
-                color: context.primaryColor,
+                  ],
+                ).pOnly(left: 20, right: 16),
               ),
-              onChanged: (value) {
-                // SearchMutation(value);
-              },
-            ).pOnly(top: 12, left: 20, right: 20),
-            20.heightBox,
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: Color(0xFFE9C241),
-              height: 40.0,
-              child: "Games"
-                  .text
-                  .xl3
-                  .color(context.accentColor)
-                  .bold
-                  .make()
-                  .pOnly(left: 10),
-            ),
-            10.heightBox,
-            Container(
-              height: 100.0,
-              child: new ListView.builder(
-                itemCount: communityData.length,
-                itemBuilder: (context, index) {
-                  return new Card(
-                    child: new Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 5.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 10.0,
-                            ),
-                          ],
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              communityData[index]["imageURL"],
-                            ),
-                          ),
-                          color: Colors.yellow.shade50,
-                          borderRadius: BorderRadius.circular(15)),
-                      width: 80.0,
-                      // child: new Text('Hello'),
-                      alignment: Alignment.center,
+              CupertinoSearchTextField(
+                style: TextStyle(
+                  color: context.primaryColor,
+                ),
+                onChanged: (value) {
+                  // SearchMutation(value);
+                },
+              ).pOnly(top: 12, left: 8, right: 8, bottom: 8),
+              // 20.heightBox,
+              Container(
+                padding: EdgeInsets.all(4),
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade50,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      // width: MediaQuery.of(context).size.width,
+                      // color: Color(0xFFE9C241),
+                      // height: 40.0,
+                      child: "Games"
+                          .text
+                          .xl3
+                          // .color(context.accentColor)
+                          // .bold
+                          .make()
+                          .pOnly(left: 10),
                     ),
-                  );
-                },
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-            10.heightBox,
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: Color(0xFFE9C241),
-              height: 40.0,
-              child: "Social Media"
-                  .text
-                  .xl3
-                  .color(context.accentColor)
-                  .bold
-                  .make()
-                  .pOnly(left: 10),
-            ),
-            10.heightBox,
-            Container(
-              height: 100.0,
-              child: new ListView.builder(
-                itemCount: communityData.length,
-                itemBuilder: (context, index) {
-                  return new Card(
-                    child: new Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 5.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 10.0,
-                            ),
-                          ],
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              communityData[index]["imageURL"],
-                            ),
-                          ),
-                          color: Colors.yellow.shade50,
-                          borderRadius: BorderRadius.circular(15)),
-                      width: 80.0,
-                      // child: new Text('Hello'),
-                      alignment: Alignment.center,
+                    // 10.heightBox,
+                    Container(
+                      height: 105,
+                      child: new ListView.builder(
+                        itemCount: gamesList.length,
+                        itemBuilder: (context, index) {
+                          return new Container(
+                            margin: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 5.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5.0,
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    gamesList[index]["imageURL"],
+                                  ),
+                                ),
+                                color: Colors.yellow.shade50,
+                                borderRadius: BorderRadius.circular(15)),
+                            width: 105.0,
+                            // child: new Text('Hello'),
+                            alignment: Alignment.center,
+                          );
+                        },
+                        scrollDirection: Axis.horizontal,
+                      ),
                     ),
-                  );
-                },
-                scrollDirection: Axis.horizontal,
+                  ],
+                ),
               ),
-            ),
-            10.heightBox,
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: Color(0xFFE9C241),
-              height: 40.0,
-              child: "OTT"
-                  .text
-                  .xl3
-                  .color(context.accentColor)
-                  .bold
-                  .make()
-                  .pOnly(left: 10),
-            ),
-            10.heightBox,
-            Container(
-              height: 100.0,
-              child: new ListView.builder(
-                itemCount: communityData.length,
-                itemBuilder: (context, index) {
-                  return new Card(
-                    child: new Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 5.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 10.0,
-                            ),
-                          ],
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              communityData[index]["imageURL"],
-                            ),
-                          ),
-                          color: Colors.yellow.shade50,
-                          borderRadius: BorderRadius.circular(15)),
-                      width: 80.0,
-                      // child: new Text('Hello'),
-                      alignment: Alignment.center,
+              Container(
+                padding: EdgeInsets.all(4),
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade50,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      // width: MediaQuery.of(context).size.width,
+                      // color: Color(0xFFE9C241),
+                      // height: 40.0,
+                      child: "Social Media"
+                          .text
+                          .xl3
+                          // .color(context.accentColor)
+                          // .bold
+                          .make()
+                          .pOnly(left: 10),
                     ),
-                  );
-                },
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-            10.heightBox,
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: Color(0xFFE9C241),
-              height: 40.0,
-              child: "Others"
-                  .text
-                  .xl3
-                  .color(context.accentColor)
-                  .bold
-                  .make()
-                  .pOnly(left: 10),
-            ),
-            10.heightBox,
-            Container(
-              height: 100.0,
-              child: new ListView.builder(
-                itemCount: communityData.length,
-                itemBuilder: (context, index) {
-                  return new Card(
-                    child: new Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 5.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 10.0,
-                            ),
-                          ],
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              communityData[index]["imageURL"],
-                            ),
-                          ),
-                          color: Colors.yellow.shade50,
-                          borderRadius: BorderRadius.circular(15)),
-                      width: 80.0,
-                      // child: new Text('Hello'),
-                      alignment: Alignment.center,
+                    // 10.heightBox,
+                    Container(
+                      height: 105,
+                      child: new ListView.builder(
+                        itemCount: socialList.length,
+                        itemBuilder: (context, index) {
+                          return new Container(
+                            margin: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 5.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5.0,
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    socialList[index]["imageURL"],
+                                  ),
+                                ),
+                                color: Colors.yellow.shade50,
+                                borderRadius: BorderRadius.circular(15)),
+                            width: 105.0,
+                            // child: new Text('Hello'),
+                            alignment: Alignment.center,
+                          );
+                        },
+                        scrollDirection: Axis.horizontal,
+                      ),
                     ),
-                  );
-                },
-                scrollDirection: Axis.horizontal,
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              // color: Color(0xFFE9C241),
-              // height: 40.0,
-              child: "Others"
-                  .text
-                  .xl5
-                  .color(context.accentColor)
-                  .bold
-                  .make()
-                  .pOnly(left: 10),
-            ),
-            // 10.heightBox,
-            Container(
-              height: 150.0,
-              child: new ListView.builder(
-                itemCount: communityData.length,
-                itemBuilder: (context, index) {
-                  return new Container(
-                    margin: EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 5.0),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.grey,
-                        //     blurRadius: 10.0,
-                        //   ),
-                        // ],
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            communityData[index]["imageURL"],
-                          ),
-                        ),
-                        color: Colors.yellow.shade50,
-                        borderRadius: BorderRadius.circular(15)),
-                    width: 150.0,
-                    // child: new Text('Hello'),
-                    alignment: Alignment.center,
-                  );
-                },
-                scrollDirection: Axis.horizontal,
+              Container(
+                padding: EdgeInsets.all(4),
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade50,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      // width: MediaQuery.of(context).size.width,
+                      // color: Color(0xFFE9C241),
+                      // height: 40.0,
+                      child: "OTT"
+                          .text
+                          .xl3
+                          // .color(context.accentColor)
+                          // .bold
+                          .make()
+                          .pOnly(left: 10),
+                    ),
+                    // 10.heightBox,
+                    Container(
+                      height: 105,
+                      child: new ListView.builder(
+                        itemCount: ottList.length,
+                        itemBuilder: (context, index) {
+                          return new Container(
+                            margin: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 5.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5.0,
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    ottList[index]["imageURL"],
+                                  ),
+                                ),
+                                color: Colors.yellow.shade50,
+                                borderRadius: BorderRadius.circular(15)),
+                            width: 105.0,
+                            // child: new Text('Hello'),
+                            alignment: Alignment.center,
+                          );
+                        },
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Container(
+                padding: EdgeInsets.all(4),
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.shade50,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      // width: MediaQuery.of(context).size.width,
+                      // color: Color(0xFFE9C241),
+                      // height: 40.0,
+                      child: "Others"
+                          .text
+                          .xl3
+                          // .color(context.accentColor)
+                          // .bold
+                          .make()
+                          .pOnly(left: 10),
+                    ),
+                    // 10.heightBox,
+                    Container(
+                      height: 105,
+                      child: new ListView.builder(
+                        itemCount: othersList.length,
+                        itemBuilder: (context, index) {
+                          return new Container(
+                            margin: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 5.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5.0,
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    othersList[index]["imageURL"],
+                                  ),
+                                ),
+                                color: Colors.yellow.shade50,
+                                borderRadius: BorderRadius.circular(15)),
+                            width: 105.0,
+                            // child: new Text('Hello'),
+                            alignment: Alignment.center,
+                          );
+                        },
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
