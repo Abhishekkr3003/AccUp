@@ -71,36 +71,36 @@ class _DrawerScreenState extends State<DrawerScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    FirebaseAuth.instance.currentUser!.displayName.toString(),
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    FirebaseAuth.instance.currentUser!.email.toString(),
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              // Image.network(
-              //     "https://firebasestorage.googleapis.com/v0/b/accup-b4eb6.appspot.com/o/Community%2FAmongUs.jpg?alt=media&token=b1e44b47-986f-451f-ab5a-daf16df1f860"),
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                  FirebaseAuth.instance.currentUser!.photoURL.toString(),
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     Column(
+          //       crossAxisAlignment: CrossAxisAlignment.end,
+          //       children: [
+          //         Text(
+          //           FirebaseAuth.instance.currentUser!.displayName.toString(),
+          //           style: TextStyle(
+          //               color: Colors.white, fontWeight: FontWeight.bold),
+          //         ),
+          //         Text(
+          //           FirebaseAuth.instance.currentUser!.email.toString(),
+          //           style: TextStyle(
+          //               color: Colors.white, fontWeight: FontWeight.bold),
+          //         )
+          //       ],
+          //     ),
+          //     SizedBox(
+          //       width: 10,
+          //     ),
+          //     // Image.network(
+          //     //     "https://firebasestorage.googleapis.com/v0/b/accup-b4eb6.appspot.com/o/Community%2FAmongUs.jpg?alt=media&token=b1e44b47-986f-451f-ab5a-daf16df1f860"),
+          //     CircleAvatar(
+          //       backgroundImage: NetworkImage(
+          //         FirebaseAuth.instance.currentUser!.photoURL.toString(),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Column(
             //crossAxisAlignment: CrossAxisAlignment.end,
             children: drawerItems
