@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:accup/Pages/categoriesPage.dart';
+import 'package:accup/Pages/postsPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -201,28 +202,38 @@ class _HomePageState extends State<HomePage> {
                       child: new ListView.builder(
                         itemCount: gamesList.length,
                         itemBuilder: (context, index) {
-                          return new Container(
-                            margin: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.white, width: 5.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 5.0,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => postsPage(
+                                            gameName: "hi",
+                                          )));
+                            },
+                            child: new Container(
+                              margin: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.white, width: 5.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 5.0,
+                                    ),
+                                  ],
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                      gamesList[index]["imageURL"],
+                                    ),
                                   ),
-                                ],
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(
-                                    gamesList[index]["imageURL"],
-                                  ),
-                                ),
-                                color: Colors.yellow.shade50,
-                                borderRadius: BorderRadius.circular(15)),
-                            width: 105.0,
-                            // child: new Text('Hello'),
-                            alignment: Alignment.center,
+                                  color: Colors.yellow.shade50,
+                                  borderRadius: BorderRadius.circular(15)),
+                              width: 105.0,
+                              // child: new Text('Hello'),
+                              alignment: Alignment.center,
+                            ),
                           );
                         },
                         scrollDirection: Axis.horizontal,
