@@ -14,110 +14,100 @@ class postsPage extends StatefulWidget {
 }
 
 class _postsPageState extends State<postsPage> {
+  List<Map> postList = [];
+  Future<void> getCommunities() async {
+    gamesList = [];
+    await FirebaseFirestore.instance
+        .collection("category")
+        .doc("games")
+        .collection("communities")
+        .doc("yL1H8V8YRV64jMpyLkjE")
+        .collection("posts")
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
+              print(doc['title']);
+              postList.add(doc.data());
+            }));
+
+    setState(() {});
+  }
+
+  int index = 0;
+
+  @override
+  void initState() {
+    getCommunities();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: "Game_Name".text.bold.xl4.make().pOnly(top: 8),
+        leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.back,
+            size: 35.0,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          TextButton(
+              child: Icon(
+                FontAwesomeIcons.info,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        _buildPopupDialog(context));
+              })
+        ],
+      ),
       backgroundColor: Colors.amber.shade50,
       body: SafeArea(
-        child: ListView(
-            children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                  icon: Icon(
-                    CupertinoIcons.back,
-                    size: 35.0,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                Text(
-                  'Game_name',
-                  style: TextStyle(fontSize: 30.0),
-                ),
-                TextButton(
-                    child: Icon(
-                      FontAwesomeIcons.info,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              _buildPopupDialog(context));
-                    }),
-                ]
-                ).pOnly(left: 20, right: 16),
-
-              ),
-
-              Container(
-                padding: EdgeInsets.all(4),
-                margin: EdgeInsets.all(8),
+        child: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {},
+              child: new Container(
+                height: MediaQuery.of(context).size.height / 5,
+                margin: EdgeInsets.only(top: 16, left: 16, right: 16),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: new ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                            },
-                            child: new Container(
-                              margin: EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.white, width: 5.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 5.0,
-                                    ),
-                                  ],
-
-                                  color: Colors.yellow.shade50,
-                                  borderRadius: BorderRadius.circular(15)),
-                              width: 105.0,
-                              alignment: Alignment.center,
-                              child: Card(
-                                elevation: 5.0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Text("hi\n"),
-                                      Text("hi"),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ),
-                          );
-                        },
-                        scrollDirection: Axis.vertical,
+                    border: Border.all(color: Colors.white, width: 5.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5.0,
                       ),
+                    ],
+                    color: Colors.yellow.shade50,
+                    borderRadius: BorderRadius.circular(15)),
+                width: 105.0,
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        "Title".text.bold.xl.make(),
+                        "Writer".text.caption(context).make(),
+                      ],
                     ),
                   ],
                 ),
               ),
-                  ],
-                ).expand(),
-              ),
-          );
+            );
+          },
+          scrollDirection: Axis.vertical,
+        ).pOnly(top: 10),
+      ),
+    );
   }
 }
-
 
 Widget _buildPopupDialog(BuildContext context) {
   return new AlertDialog(
@@ -126,7 +116,8 @@ Widget _buildPopupDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Here some of the games information will be shown like its genre and some info from wiki or play store."),
+        Text(
+            "Here some of the games information will be shown like its genre and some info from wiki or play store."),
       ],
     ),
     actions: <Widget>[
