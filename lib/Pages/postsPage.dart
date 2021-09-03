@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:accup/Utils/themes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,9 +15,9 @@ class postsPage extends StatefulWidget {
 }
 
 class _postsPageState extends State<postsPage> {
+  bool dataAvlb = false;
   List<Map> postList = [];
   Future<void> getCommunities() async {
-    gamesList = [];
     await FirebaseFirestore.instance
         .collection("category")
         .doc("games")
@@ -29,7 +30,9 @@ class _postsPageState extends State<postsPage> {
               postList.add(doc.data());
             }));
 
-    setState(() {});
+    setState(() {
+      dataAvlb = true;
+    });
   }
 
   int index = 0;
@@ -42,10 +45,17 @@ class _postsPageState extends State<postsPage> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: "Game_Name".text.bold.xl4.make().pOnly(top: 8),
+        title: Container(
+          child: Text(
+            "${widget.gameName}",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
         leading: IconButton(
           icon: Icon(
             CupertinoIcons.back,
@@ -56,7 +66,7 @@ class _postsPageState extends State<postsPage> {
         actions: [
           TextButton(
               child: Icon(
-                FontAwesomeIcons.info,
+                FontAwesomeIcons.infoCircle,
                 color: Colors.black,
               ),
               onPressed: () {
@@ -69,41 +79,97 @@ class _postsPageState extends State<postsPage> {
       ),
       backgroundColor: Colors.amber.shade50,
       body: SafeArea(
-        child: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {},
-              child: new Container(
-                height: MediaQuery.of(context).size.height / 5,
-                margin: EdgeInsets.only(top: 16, left: 16, right: 16),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 5.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 5.0,
+        child: !dataAvlb
+            ? CircularProgressIndicator().centered()
+            : ListView.builder(
+                itemCount: postList.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      print(postList);
+                    },
+                    child: new Container(
+                      // height: MediaQuery.of(context).size.height / 5,
+                      margin: EdgeInsets.only(top: 16, left: 16, right: 16),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 5.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 5.0,
+                            ),
+                          ],
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(15)),
+                      width: 105.0,
+                      // alignment: Alignment.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          "${postList[index]["title"]}"
+                              .text
+                              .justify
+                              .bold
+                              .make(),
+                          "${postList[index]["author"]}"
+                              .text
+                              .caption(context)
+                              .make(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.all(4),
+                                height: deviceWidth / 10,
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: "\$${postList[index]["price"]}"
+                                    .text
+                                    .white
+                                    .xl
+                                    .bold
+                                    .makeCentered(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(4),
+                                // margin: EdgeInsets.all(4),
+                                height: deviceWidth / 10,
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child:
+                                    "Likes: ${postList[index]["likes"].length}"
+                                        .text
+                                        .white
+                                        .makeCentered(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.all(4),
+                                height: deviceWidth / 10,
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: "Views: ${postList[index]["views"]}"
+                                    .text
+                                    .white
+                                    .makeCentered(),
+                              ),
+                            ],
+                          ).p12(),
+                        ],
                       ),
-                    ],
-                    color: Colors.yellow.shade50,
-                    borderRadius: BorderRadius.circular(15)),
-                width: 105.0,
-                alignment: Alignment.center,
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        "Title".text.bold.xl.make(),
-                        "Writer".text.caption(context).make(),
-                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          },
-          scrollDirection: Axis.vertical,
-        ).pOnly(top: 10),
+                  );
+                },
+                scrollDirection: Axis.vertical,
+              ).pOnly(top: 10),
       ),
     );
   }

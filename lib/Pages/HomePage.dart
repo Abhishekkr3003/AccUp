@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => postsPage(
-                                            gameName: "hi",
+                                            gameName: gamesList[index]["name"],
                                           )));
                             },
                             child: new Container(
@@ -302,7 +302,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 padding: EdgeInsets.all(4),
-                margin: EdgeInsets.all(8),
+                // margin: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.amber.shade50,
                   borderRadius: BorderRadius.circular(15),
@@ -360,7 +360,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 padding: EdgeInsets.all(4),
-                margin: EdgeInsets.all(8),
+                // margin: EdgeInsets.al  l(8),
                 decoration: BoxDecoration(
                   color: Colors.amber.shade50,
                   borderRadius: BorderRadius.circular(15),
