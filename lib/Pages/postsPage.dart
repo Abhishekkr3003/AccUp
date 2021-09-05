@@ -88,10 +88,12 @@ class _postsPageState extends State<postsPage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
+                      print(postList[index]);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => postDetailsPage()));
+                              builder: (context) => postDetailsPage(
+                                  currentPost: postList[index])));
                     },
                     child: new Container(
                       // height: MediaQuery.of(context).size.height / 5,
@@ -180,8 +182,11 @@ class _postsPageState extends State<postsPage> {
         padding: EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => newPostPage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        newPostPage(gameName: widget.gameName)));
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
