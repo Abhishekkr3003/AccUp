@@ -4,6 +4,8 @@ import 'package:accup/Utils/themes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:accup/Pages/newPostPage.dart';
+import 'package:accup/Pages/postDetailsPage.dart';
 
 class postsPage extends StatefulWidget {
   postsPage({required this.gameName});
@@ -86,7 +88,10 @@ class _postsPageState extends State<postsPage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      print(postList);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => postDetailsPage()));
                     },
                     child: new Container(
                       // height: MediaQuery.of(context).size.height / 5,
@@ -170,6 +175,26 @@ class _postsPageState extends State<postsPage> {
                 },
                 scrollDirection: Axis.vertical,
               ).pOnly(top: 10),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => newPostPage()));
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+            minimumSize: MaterialStateProperty.all<Size>(Size(0, 50)),
+          ),
+          child: Text(
+            "Create New Post",
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }
