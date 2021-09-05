@@ -22,8 +22,8 @@ class _postDetailsPageState extends State<postDetailsPage> {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 
-    String curUserID = FirebaseAuth.instance.currentUser!.uid;
-
+    // String curUserID = FirebaseAuth.instance.currentUser!.uid;
+    String curUserID = "sdfasjkfjjasf";
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
